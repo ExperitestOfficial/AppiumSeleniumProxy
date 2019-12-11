@@ -29,3 +29,11 @@ In the following example you can see how it can be used to create an IOSDriver.
     }
 
 ```
+
+If you are getting the following exception:
+```
+Caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+```
+it is due to MIDM proxy used by your corporate and you should follow the following guidlines:
+https://stackoverflow.com/questions/9619030/resolving-javax-net-ssl-sslhandshakeexception-sun-security-validator-validatore
+
