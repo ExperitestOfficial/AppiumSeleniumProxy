@@ -5,7 +5,7 @@ The provided code was tested with appium java client version 7.1.0.
 
 In the following example you can see how it can be used to create an IOSDriver.
 
-````
+```java
     static String host = "<env>.experitest.com";
     static String accessKey = "<access key>";
     static String proxyHost = "<proxy host>";
@@ -24,9 +24,8 @@ In the following example you can see how it can be used to create an IOSDriver.
 
         URL url = new URL("https://" + host + "/wd/hub");
 
-        //HttpCommandExecutor executor = new HttpCommandExecutor(new HashMap<String, CommandInfo>(), url, new MyFactory());
         driver = new IOSDriver<IOSElement>(
                 SeleniumClientFactory.createExecutor(url, proxyHost, proxyPort , proxyUser, proxyPassword), dc);
     }
 
-````
+```
