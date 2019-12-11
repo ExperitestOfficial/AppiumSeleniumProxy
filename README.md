@@ -13,7 +13,7 @@ In the following example you can see how it can be used to create an IOSDriver.
     static String proxyUser = "user";
     static String proxyPassword = "password";
 
-    RemoteWebDriver driver = null;
+    IOSDriver driver = null;
     protected DesiredCapabilities dc = new DesiredCapabilities();
     @Before
     public void setUp() throws Exception{
