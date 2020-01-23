@@ -36,7 +36,9 @@ Caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.Validator
 ```
 it is due to MIDM proxy used by your corporate and you should follow the following guidlines:
 https://stackoverflow.com/questions/9619030/resolving-javax-net-ssl-sslhandshakeexception-sun-security-validator-validatore
+
 To get access to mobile devices and desktop browser:
+
 https://experitest.com
 
 
