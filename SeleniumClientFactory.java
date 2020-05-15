@@ -35,43 +35,28 @@ public class SeleniumClientFactory implements HttpClient.Factory {
             public HttpClient createClient(URL url) {
                 // configure the proxy
                 proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
-                OkHttpClient.Builder client = (new OkHttpClient.Builder())
-                        .connectionPool(SeleniumClientFactory.this.pool)
-                        .followRedirects(true)
-                        .followSslRedirects(true)
-                        .proxy(this.proxy)
-                        .readTimeout(this.readTimeout.toMillis(), TimeUnit.MILLISECONDS)
-                        .connectTimeout(this.connectionTimeout.toMillis(), TimeUnit.MILLISECONDS);
+                
                 // configure the credentials and register in the builder
+                Authenticator authenticator = null;
                 if(proxyUsername != null && proxyPassword != null) {
                     String credential = Credentials.basic(proxyUsername, proxyPassword);
-                    Authenticator authenticator = new Authenticator() {
+                    authenticator = new Authenticator() {
                         public Request authenticate(Route route, Response response) throws IOException {
                             return response.request().newBuilder()
                                     .header("Proxy-Authorization", credential)
                                     .build();
                         }
                     };
-                    client.proxyAuthenticator(authenticator);
                 }
-
-                String info = url.getUserInfo();
-                if (!Strings.isNullOrEmpty(info)) {
-                    String[] parts = info.split(":", 2);
-                    String user = parts[0];
-                    String pass = parts.length > 1 ? parts[1] : null;
-                    String credentials = Credentials.basic(user, pass);
-                    client.authenticator((route, response) -> {
-                        return response.request().header("Authorization") != null ? null : response.request().newBuilder().header("Authorization", credentials).build();
-                    });
-                }
-
-
-                client.addNetworkInterceptor((chain) -> {
-                    Request request = chain.request();
-                    Response response = chain.proceed(request);
-                    return response.code() == 408 ? response.newBuilder().code(500).message("Server-Side Timeout").build() : response;
-                });
+                OkHttpClient.Builder client = (new OkHttpClient.Builder())
+                        .connectionPool(SeleniumClientFactory.this.pool)
+                        .followRedirects(true)
+                        .followSslRedirects(true)
+                        .proxy(this.proxy)
+                        .readTimeout(this.readTimeout.toMillis(), TimeUnit.MILLISECONDS)
+                        .connectTimeout(this.connectionTimeout.toMillis(), TimeUnit.MILLISECONDS).
+                        .proxyAuthenticator(authenticator);
+             
                 return new org.openqa.selenium.remote.internal.OkHttpClient(client.build(), url);
             }
         };
